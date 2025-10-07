@@ -33,39 +33,23 @@ export function PredictionOverview() {
           </Card>
         </div>
 
-        {/* Route Map Preview */}
         <div className="glass rounded-2xl p-8 max-w-4xl mx-auto">
-          <div className="aspect-video bg-slate-900/50 rounded-xl flex items-center justify-center relative overflow-hidden">
-            <img
-              src="/traffic-route-map-with-highlighted-path.jpg"
-              alt="Route map preview"
-              className="w-full h-full object-cover opacity-80"
+          <h3 className="text-white text-lg font-semibold mb-4 font-[family-name:var(--font-poppins)]">
+            Route Preview (Predicted Path)
+          </h3>
+          <div className="rounded-xl overflow-hidden shadow-lg">
+            <iframe
+              title="Route preview"
+              width="100%"
+              height="400"
+              style={{ border: 0 }}
+              loading="lazy"
+              allowFullScreen
+              referrerPolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d15557.960069156497!2d74.84376710059614!3d12.876181667117299!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e6!4m5!1s0x3ba35bb399771a07%3A0xeb2856bb79d6e5ff!2sMangalore%20Central%20Railway%20Station!3m2!1d12.8633417!2d74.843251!4m5!1s0x3ba35ba4fa92feed%3A0x88d5f9ac7cd17769!2sKadri%20Park!3m2!1d12.888980199999999!2d74.8562231!5e0!3m2!1sen!2sin!4v1759801822419!5m2!1sen!2sin"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent" />
-            <div className="absolute bottom-4 left-4 right-4">
-              {/* Route Preview Section */}
-              <div className="mt-6 space-y-2">
-                <h3 className="text-white text-sm opacity-90">
-                  Route Preview (Predicted Path)
-                </h3>
-                <div className="rounded-xl overflow-hidden shadow-lg">
-                  <iframe
-                    title="Route preview"
-                    width="100%"
-                    height="300"
-                    style={{ border: 0 }}
-                    loading="lazy"
-                    allowFullScreen
-                    src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d15557.960069156497!2d74.84376710059614!3d12.876181667117299!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e6!4m5!1s0x3ba35bb399771a07%3A0xeb2856bb79d6e5ff!2sMangalore%20Central%20Railway%20Station!3m2!1d12.8633417!2d74.843251!4m5!1s0x3ba35ba4fa92feed%3A0x88d5f9ac7cd17769!2sKadri%20Park!3m2!1d12.888980199999999!2d74.8562231!5e0!3m2!1sen!2sin!4v1759801822419!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-                </iframe>
-                </div>
-                <p className="text-gray-300 text-xs mt-2">
-                  Predicted route visualization using AI model — not live traffic
-                </p>
-              </div>
-
-            </div>
           </div>
+          <p className="text-slate-400 text-sm mt-4">Predicted route visualization using AI model — not live traffic</p>
         </div>
       </div>
     </section>
