@@ -12,13 +12,18 @@ import Footer from "@/components/Footer";
 
 const Index = () => {
   const [showPrediction, setShowPrediction] = useState(false);
+const [predictionData, setPredictionData] = useState<any>(null);
 
-  const handlePredict = () => {
-    setShowPrediction(true);
-    setTimeout(() => {
-      document.getElementById("prediction")?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
-  };
+const handlePredict = (data?: any) => {
+  if (data) {
+    setPredictionData(data);
+  }
+  setShowPrediction(true);
+  setTimeout(() => {
+    document.getElementById("prediction")?.scrollIntoView({ behavior: "smooth" });
+  }, 100);
+};
+
 
   return (
     <div className="min-h-screen">

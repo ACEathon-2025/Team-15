@@ -1,79 +1,152 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Clock } from "lucide-react";
+import React, { useState } from "react";
+import { Calendar } from "@/components/ui/calendar";
 
-const PredictForm = ({ onPredict }: { onPredict: () => void }) => {
-  const [source, setSource] = useState("");
-  const [destination, setDestination] = useState("");
-  const [time, setTime] = useState("");
+interface PredictFormProps {
+  onPredict: (data?: any) => void;
+}
 
-  const handlePredict = () => {
-    if (source && destination && time) {
-      onPredict();
+const PredictForm: React.FC<PredictFormProps> = ({ onPredict }) => {
+  const [source, setSource] = useState("Udupi");
+  const [destination, setDestination] = useState("Mangalore");
+  const [desiredArrival, setDesiredArrival] = useState("");
+  const [weather, setWeather] = useState("Clear");
+  const [isFestival, setIsFestival] = useState(false);
+  const [calamities, setCalamities] = useState(false);
+  const [roadConstruction, setRoadConstruction] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    if (!desiredArrival) {
+      setError("Please select a date and time");
+      return;
+    }
+
+    const payload = {
+      source,
+      destination,
+      desired_arrival: desiredArrival,
+      weather_main: weather,
+      is_festival: isFestival ? 1 : 0,
+      calamities: calamities ? 1 : 0,
+      road_construction: roadConstruction ? 1 : 0,
+    };
+
+    try {
+      setLoading(true);
+      const response = await fetch("http://127.0.0.1:8000/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) throw new Error("Failed to fetch prediction");
+
+      const data = await response.json();
+      onPredict(data); // Pass prediction data to parent
+    } catch (err: any) {
+      console.error(err);
+      setError("Something went wrong while predicting.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <section id="predict-form" className="py-20 px-6 bg-gradient-to-b from-background to-navy/20">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Plan Your <span className="gradient-text">Journey</span>
-          </h2>
-          <p className="text-lg text-foreground/80">
-            Enter your trip details to get AI-powered traffic predictions
-          </p>
-        </div>
+    <div className="py-10 bg-gray-50">
+      <form
+        onSubmit={handleSubmit}
+        className="max-w-xl mx-auto bg-white shadow-md rounded-lg p-6 space-y-4"
+      >
+        <h2 className="text-2xl font-semibold text-center">Plan Your Commute</h2>
 
-        <div className="glass-card p-8 animate-fade-in">
-          <div className="grid md:grid-cols-3 gap-4 mb-6">
-            <Select value={source} onValueChange={setSource}>
-              <SelectTrigger className="glass border-white/20 text-foreground">
-                <SelectValue placeholder="Source" />
-              </SelectTrigger>
-              <SelectContent className="bg-card border-white/20">
-                <SelectItem value="mangalore">Mangalore City</SelectItem>
-                <SelectItem value="kulshekar">Kulshekar</SelectItem>
-                <SelectItem value="pumpwell">Pumpwell</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <Select value={destination} onValueChange={setDestination}>
-              <SelectTrigger className="glass border-white/20 text-foreground">
-                <SelectValue placeholder="Destination" />
-              </SelectTrigger>
-              <SelectContent className="bg-card border-white/20">
-                <SelectItem value="kadri">Kadri</SelectItem>
-                <SelectItem value="airport">Airport</SelectItem>
-                <SelectItem value="bejai">Bejai</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <div className="relative">
-              <input
-                type="time"
-                value={time}
-                onChange={(e) => setTime(e.target.value)}
-                className="w-full glass border-white/20 rounded-lg px-4 py-2 bg-transparent text-foreground focus:ring-2 focus:ring-cyan outline-none"
-              />
-              <Clock className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-cyan pointer-events-none" />
-            </div>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium">Source</label>
+            <input
+              className="w-full border px-2 py-1 rounded"
+              value={source}
+              onChange={(e) => setSource(e.target.value)}
+            />
           </div>
 
-          <Button
-            onClick={handlePredict}
-            className="w-full bg-cyan hover:bg-cyan-glow text-navy font-bold text-lg py-6 glow-cyan hover-glow"
-          >
-            Predict Route
-          </Button>
-
-          <p className="text-sm text-foreground/60 mt-4 text-center">
-            Plan ahead. Save time. Travel stress-free.
-          </p>
+          <div>
+            <label className="block text-sm font-medium">Destination</label>
+            <input
+              className="w-full border px-2 py-1 rounded"
+              value={destination}
+              onChange={(e) => setDestination(e.target.value)}
+            />
+          </div>
         </div>
-      </div>
-    </section>
+
+        <div>
+          <label className="block text-sm font-medium mb-1">Select Date & Time</label>
+          <Calendar withTime onDateTimeChange={setDesiredArrival} />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium">Weather</label>
+          <select
+            className="w-full border px-2 py-1 rounded"
+            value={weather}
+            onChange={(e) => setWeather(e.target.value)}
+          >
+            <option>Clear</option>
+            <option>Clouds</option>
+            <option>Rain</option>
+            <option>Drizzle</option>
+            <option>Thunderstorm</option>
+            <option>Mist</option>
+            <option>Haze</option>
+          </select>
+        </div>
+
+        <div className="flex space-x-4">
+          <label>
+            <input
+              type="checkbox"
+              checked={isFestival}
+              onChange={(e) => setIsFestival(e.target.checked)}
+            />{" "}
+            Festival
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              checked={calamities}
+              onChange={(e) => setCalamities(e.target.checked)}
+            />{" "}
+            Calamities
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              checked={roadConstruction}
+              onChange={(e) => setRoadConstruction(e.target.checked)}
+            />{" "}
+            Road Construction
+          </label>
+        </div>
+
+        {error && <p className="text-red-500 text-sm">{error}</p>}
+
+        <div className="text-center">
+          <button
+            type="submit"
+            disabled={loading}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            {loading ? "Predicting..." : "Predict Traffic"}
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 
