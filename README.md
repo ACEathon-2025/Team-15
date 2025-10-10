@@ -31,8 +31,8 @@ helping users plan smarter and arrive on time, every time.
 | **Frontend** | React.js (Next.js) + TailwindCSS |
 | **Backend** | FastAPI (Python) |
 | **AI Model** | Gemini API |
-| **Data Sources** | OpenStreetMap, Maps API, OpenWeather API |
-| **MVP Deployment** | Emergent Agent |
+| **Data Sources** | OpenStreetMap API, OpenWeather API |
+| **MVP Deployment** | Emergent Agent Preview |
 
 ---
 
@@ -46,7 +46,7 @@ helping users plan smarter and arrive on time, every time.
 ---
 
 ### 🎨 Frontend Highlights
-- Sleek **Next.js + Tailwind** interface  
+- Sleek **Pixelated and 90's 2D Game** interface  
 - Live, dynamic **route preview**  
 - Interactive **cards** for ETA, congestion level, and travel suggestions  
 - Fully responsive and optimized for hackathons  
