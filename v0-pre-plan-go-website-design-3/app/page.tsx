@@ -1,3 +1,4 @@
+import LeafletRouteMap from "@/components/LeafletRouteMap";
 import { Hero } from "@/components/hero"
 import { PredictionOverview } from "@/components/prediction-overview"
 import { RouteAnalytics } from "@/components/route-analytics"
@@ -17,6 +18,7 @@ export default function Home() {
       <Hero />
       <PredictionForm />
       <PredictionOverview />
+      <LeafletRouteMap />
       <TrafficCharts />
       <RouteAnalytics />
       <Features />
